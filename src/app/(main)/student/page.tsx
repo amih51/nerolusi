@@ -1,4 +1,4 @@
-export default function page() {
+export default function Page() {
   return (
     <div className="size-full grid gap-3">
       <div className="gap-3 flex flex-row w-full">
