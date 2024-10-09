@@ -1,4 +1,4 @@
-import Navbar from "@/components/navbar/Navbar";
+import Navbar from "@/components/navbar/navbar";
 
 export default function layout({
   children,
@@ -6,9 +6,9 @@ export default function layout({
   children: React.ReactNode;
 }>) {
   return (
-    <body className="size-full flex flex-row">
+    <body className="size-full">
       <Navbar />
-      <div className="p-12">{children}</div>
+      <div className="mx-12 my-3">{children}</div>
     </body>
   );
 }
