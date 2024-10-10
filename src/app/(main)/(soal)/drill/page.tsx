@@ -8,32 +8,38 @@ export default function Page() {
       <ul>
         <li>
           <Button asChild>
-            <Link href={`/drill/PU`}>PU</Link>
+            <Link href={`/drill/PU`}></Link>
+            PU
           </Button>
         </li>
         <li>
           <Button asChild>
-            <Link href={`/drill/PBM`}>PBM</Link>
+            <Link href={`/drill/PBM`}></Link>
+            PBM
           </Button>
         </li>
         <li>
           <Button asChild>
-            <Link href={`/drill/LB`}>LB</Link>
+            <Link href={`/drill/LB`}></Link>
+            LB
           </Button>
         </li>
         <li>
           <Button asChild>
-            <Link href={`/drill/PPU`}>PPU</Link>
+            <Link href={`/drill/PPU`}></Link>
+            PPU
           </Button>
         </li>
         <li>
           <Button asChild>
-            <Link href={`/drill/PK`}>PK</Link>
+            <Link href={`/drill/PK`}></Link>
+            PK
           </Button>
         </li>
         <li>
           <Button asChild>
-            <Link href={`/drill/PM`}>PM</Link>
+            <Link href={`/drill/PM`}></Link>
+            PM
           </Button>
         </li>
       </ul>
