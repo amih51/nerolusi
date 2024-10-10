@@ -1,3 +1,4 @@
+import SignIn from "@/components/sign-in";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -15,6 +16,7 @@ export default function Home() {
         <Button asChild className="w-fit">
           <Link href={"/teacher"}>Teacher</Link>
         </Button>
+        <SignIn />
       </div>
     </div>
   );
