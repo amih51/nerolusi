@@ -6,18 +6,7 @@ import {
   varchar,
   mysqlEnum,
 } from "drizzle-orm/mysql-core";
-import mysql from "mysql2/promise";
-import { drizzle } from "drizzle-orm/mysql2";
 import type { AdapterAccountType } from "next-auth/adapters";
-
-export const poolConnection = mysql.createPool({
-  host: "host",
-  user: "user",
-  password: "password",
-  database: "database",
-});
-
-export const db = drizzle(poolConnection);
 
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 })

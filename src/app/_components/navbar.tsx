@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {
   NavigationMenu,
@@ -15,6 +14,8 @@ import React from "react";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./mode-toggle";
 import { cn } from "~/lib/utils";
+import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const soals: { title: string; href: string; description: string }[] = [
   {
@@ -56,7 +57,9 @@ const soals: { title: string; href: string; description: string }[] = [
 ];
 
 export default function Navbar() {
-  const pathname = usePathname();
+  const session = useSession();
+  const user = session.data?.user;
+
   return (
     <div className="sticky left-0 top-0 flex h-10 w-screen items-center gap-3 border-b p-6 px-12">
       <Link href={"/"}>
@@ -95,17 +98,22 @@ export default function Navbar() {
         </NavigationMenuList>
       </NavigationMenu>
 
-      {pathname == "/admin" && (
+      {user?.role == "admin" && (
         <Button variant={"outline"} asChild>
           <Link href={"/"}>Manajemen Akun</Link>
         </Button>
       )}
-      {(pathname == "/admin" || pathname == "/teacher") && (
+      {(user?.role == "admin" || user?.role == "/teacher") && (
         <Button variant={"outline"} asChild>
           <Link href={"/"}>Manajemen Soal</Link>
         </Button>
       )}
       <ModeToggle />
+      <Button
+        variant={"ghost"}
+        onClick={() => signIn("google")}
+        className="flex w-full flex-row items-center border p-2"
+      ></Button>
     </div>
   );
 }
