@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Button } from "../_components/ui/button";
 
 export default function Home() {
   return (
-    <div className="h-screen flex justify-center items-center">
-      <div className="size-fit bg-card border rounded-[1rem] p-6 flex flex-col justify-center items-center gap-3">
+    <div className="flex h-screen items-center justify-center">
+      <div className="flex size-fit flex-col items-center justify-center gap-3 rounded-[1rem] border bg-card p-6">
         Signin Nerolusi
         <Button asChild className="w-fit">
           <Link href={"/admin"}>Admin</Link>

@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Button } from "~/app/_components/ui/button";
 
 export default function Page({
   params: { paket, nomor },
@@ -7,12 +7,12 @@ export default function Page({
   params: { paket: string; nomor: string };
 }) {
   return (
-    <div className="w-full flex m-6">
+    <div className="m-6 flex w-full">
       <div className="w-full">
         Soal tryout paket {`${paket}`} nomor {`${nomor}`}
       </div>
-      <div className="w-1/4 flex">
-        <ul className="flex gap-3 flex-auto">
+      <div className="flex w-1/4">
+        <ul className="flex flex-auto gap-3">
           <li>
             <Button asChild>
               <Link href={`/tryout/${paket}/1`}>1</Link>

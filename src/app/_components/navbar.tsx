@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "../ui/button";
 import Image from "next/image";
 import {
   NavigationMenu,
@@ -11,10 +10,11 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+} from "./ui/navigation-menu";
 import React from "react";
-import { cn } from "@/lib/utils";
-import { ModeToggle } from "../mode-toggle";
+import { Button } from "./ui/button";
+import { ModeToggle } from "./mode-toggle";
+import { cn } from "~/lib/utils";
 
 const soals: { title: string; href: string; description: string }[] = [
   {
@@ -58,7 +58,7 @@ const soals: { title: string; href: string; description: string }[] = [
 export default function Navbar() {
   const pathname = usePathname();
   return (
-    <div className="w-screen sticky left-0 top-0 h-10 p-6 flex items-center gap-3 border-b px-12">
+    <div className="sticky left-0 top-0 flex h-10 w-screen items-center gap-3 border-b p-6 px-12">
       <Link href={"/"}>
         <Image
           src={"/logo.png"}
@@ -74,7 +74,7 @@ export default function Navbar() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Drilling Soal</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {soals.map((soal) => (
                   <ListItem
                     key={soal.title}
@@ -121,7 +121,7 @@ const ListItem = React.forwardRef<
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
+            className,
           )}
           {...props}
         >
