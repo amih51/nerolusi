@@ -4,19 +4,20 @@ import {
   mysqlTable,
   primaryKey,
   varchar,
+  mysqlEnum,
 } from "drizzle-orm/mysql-core";
 import mysql from "mysql2/promise";
 import { drizzle } from "drizzle-orm/mysql2";
 import type { AdapterAccountType } from "next-auth/adapters";
 
-export const connection = await mysql.createConnection({
+export const poolConnection = mysql.createPool({
   host: "host",
   user: "user",
   password: "password",
   database: "database",
 });
 
-export const db = drizzle(connection);
+export const db = drizzle(poolConnection);
 
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 })
@@ -29,6 +30,9 @@ export const users = mysqlTable("user", {
     fsp: 3,
   }),
   image: varchar("image", { length: 255 }),
+  role: mysqlEnum(["student", "teacher", "admin"])
+    .notNull()
+    .$default(() => "student"),
 });
 
 export const accounts = mysqlTable(
@@ -64,17 +68,3 @@ export const sessions = mysqlTable("session", {
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 });
-
-export const verificationTokens = mysqlTable(
-  "verificationToken",
-  {
-    identifier: varchar("identifier", { length: 255 }).notNull(),
-    token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull(),
-  },
-  (verificationToken) => ({
-    compositePk: primaryKey({
-      columns: [verificationToken.identifier, verificationToken.token],
-    }),
-  }),
-);
