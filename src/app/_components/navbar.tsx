@@ -14,7 +14,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./mode-toggle";
 import { cn } from "~/lib/utils";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 
 const soals: { title: string; href: string; description: string }[] = [
@@ -109,11 +109,19 @@ export default function Navbar() {
         </Button>
       )}
       <ModeToggle />
-      <Button
-        variant={"ghost"}
-        onClick={() => signIn("google")}
-        className="flex w-full flex-row items-center border p-2"
-      ></Button>
+      {!user ? (
+        <Button
+          variant={"ghost"}
+          onClick={() => signIn("google")}
+          className="border"
+        >
+          Sign In
+        </Button>
+      ) : (
+        <Button variant={"ghost"} onClick={() => signOut()} className="border">
+          Sign Out
+        </Button>
+      )}
     </div>
   );
 }

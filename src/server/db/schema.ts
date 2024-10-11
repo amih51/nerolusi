@@ -5,6 +5,7 @@ import {
   primaryKey,
   varchar,
   mysqlEnum,
+  bigint,
 } from "drizzle-orm/mysql-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
@@ -56,4 +57,30 @@ export const sessions = mysqlTable("session", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
+});
+
+export const classes = mysqlTable("classes", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  name: varchar("name", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const packages = mysqlTable("packages", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  name: varchar("name", { length: 255 }).notNull(),
+  type: mysqlEnum(["tryout", "drill"]).notNull(),
+  classId: bigint("classId", { mode: "number" }).references(() => classes.id, {
+    onDelete: "cascade",
+  }),
+});
+
+export const questions = mysqlTable("questions", {
+  id: varchar("id", { length: 255 })
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  content: varchar("content", { length: 2048 }).notNull(),
+  packageId: bigint("packageId", { mode: "number" })
+    .notNull()
+    .references(() => packages.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
