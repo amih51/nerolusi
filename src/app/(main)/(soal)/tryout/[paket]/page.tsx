@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "~/app/_components/ui/button";
 import Link from "next/link";
 
 export default function Page({
@@ -7,7 +7,7 @@ export default function Page({
   params: { paket: string };
 }) {
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col items-center justify-center">
       <div>Soal UTBK {`${paket}`}</div>
       <div>waktu: 3 jam </div>
       <Button asChild>

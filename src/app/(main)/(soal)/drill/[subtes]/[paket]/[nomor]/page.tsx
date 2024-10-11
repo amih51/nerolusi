@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "~/app/_components/ui/button";
 import Link from "next/link";
 
 export default function Page({
@@ -7,12 +7,12 @@ export default function Page({
   params: { subtes: string; paket: string; nomor: string };
 }) {
   return (
-    <div className="w-full flex gap-3">
-      <div className="w-full border p-3 rounded-md">
+    <div className="flex w-full gap-3">
+      <div className="w-full rounded-md border p-3">
         Soal drill subtes {`${subtes}`} paket {`${paket}`} nomor {`${nomor}`}
       </div>
-      <div className="w-fit border p-3 rounded-md">
-        <ul className="flex gap-1 w-[256px] flex-wrap">
+      <div className="w-fit rounded-md border p-3">
+        <ul className="flex w-[256px] flex-wrap gap-1">
           <li>
             <Button className="w-12" asChild>
               <Link href={`/drill/${subtes}/${paket}/1`}>1</Link>

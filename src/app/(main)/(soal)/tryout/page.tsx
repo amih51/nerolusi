@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "~/app/_components/ui/button";
 import Link from "next/link";
 
 export default function Page() {
   return (
-    <div className="items-center justify-center flex flex-col gap-3">
+    <div className="flex flex-col items-center justify-center gap-3">
       pilih paket tryout:
-      <ul className="gap-3 flex">
+      <ul className="flex gap-3">
         <li>
           <Button asChild>
             <Link href={`/tryout/1`}>1</Link>
