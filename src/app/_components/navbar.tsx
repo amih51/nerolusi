@@ -75,7 +75,9 @@ export default function Navbar() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Drilling Soal</NavigationMenuTrigger>
+            <NavigationMenuTrigger>
+              <Link href={"/drill"}>Drilling Soal</Link>
+            </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {soals.map((soal) => (
