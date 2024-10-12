@@ -14,43 +14,43 @@ import React from "react";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./mode-toggle";
 import { cn } from "~/lib/utils";
-import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import AuthDialog from "./auth-dialog";
 
 const soals: { title: string; href: string; description: string }[] = [
   {
     title: "Kemampuan Penalaran Umum",
-    href: "/drill/PU",
+    href: "/drill/pu",
     description:
       "Mengukur kemampuan berpikir logis, analitis, dan sistematis dalam menyelesaikan masalah.",
   },
   {
     title: "Pengetahuan dan Pemahaman Umum",
-    href: "/drill/PPU",
+    href: "/drill/ppu",
     description:
       "Menilai wawasan dan pengetahuan umum serta pemahaman mengenai berbagai isu terkini.",
   },
   {
     title: "Kemampuan Memahami Bacaan dan Menulis",
-    href: "/drill/PBM",
+    href: "/drill/pbm",
     description:
       "Mengukur kemampuan dalam memahami teks bacaan dan menyusun tulisan dengan baik dan benar.",
   },
   {
     title: "Pengetahuan Kuantitatif",
-    href: "/drill/PK",
+    href: "/drill/pk",
     description:
       "Menilai kemampuan mengaplikasikan konsep matematika dasar dalam kehidupan sehari-hari.",
   },
   {
     title: "Literasi Bahasa Indonesia dan Bahasa Inggris",
-    href: "/drill/LB",
+    href: "/drill/lb",
     description:
       "Mengukur kemampuan memahami teks dan konteks dalam Bahasa Indonesia dan Bahasa Inggris.",
   },
   {
     title: "Penalaran Matematika",
-    href: "/drill/PM",
+    href: "/drill/pm",
     description:
       "Mengukur kemampuan penalaran matematis dalam menyelesaikan masalah yang lebih kompleks.",
   },
@@ -61,7 +61,7 @@ export default function Navbar() {
   const user = session.data?.user;
 
   return (
-    <div className="sticky left-0 top-0 flex h-10 w-screen items-center gap-3 border-b p-6 px-12">
+    <div className="sticky left-0 top-0 flex h-10 w-screen items-center gap-3 px-12 py-6">
       <Link href={"/"}>
         <Image
           src={"/logo.png"}
@@ -111,19 +111,7 @@ export default function Navbar() {
         </Button>
       )}
       <ModeToggle />
-      {!user ? (
-        <Button
-          variant={"ghost"}
-          onClick={() => signIn("google")}
-          className="border"
-        >
-          Sign In
-        </Button>
-      ) : (
-        <Button variant={"ghost"} onClick={() => signOut()} className="border">
-          Sign Out
-        </Button>
-      )}
+      <AuthDialog />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import {
   primaryKey,
   varchar,
   mysqlEnum,
-  bigint,
+  time,
 } from "drizzle-orm/mysql-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
@@ -60,16 +60,19 @@ export const sessions = mysqlTable("session", {
 });
 
 export const classes = mysqlTable("classes", {
-  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  id: int("id").primaryKey().autoincrement(),
   name: varchar("name", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const packages = mysqlTable("packages", {
-  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  id: int("id").primaryKey().autoincrement(),
   name: varchar("name", { length: 255 }).notNull(),
   type: mysqlEnum(["tryout", "drill"]).notNull(),
-  classId: bigint("classId", { mode: "number" }).references(() => classes.id, {
+  TOstart: timestamp("start"),
+  TOend: timestamp("end"),
+  TOduration: time("duration"),
+  classId: int("classId").references(() => classes.id, {
     onDelete: "cascade",
   }),
 });
@@ -79,7 +82,9 @@ export const questions = mysqlTable("questions", {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   content: varchar("content", { length: 2048 }).notNull(),
-  packageId: bigint("packageId", { mode: "number" })
+  type: mysqlEnum(["pu", "ppu", "pbm", "pk", "lb", "pm"]).notNull(),
+  score: int("score"),
+  packageId: int("packageId")
     .notNull()
     .references(() => packages.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
