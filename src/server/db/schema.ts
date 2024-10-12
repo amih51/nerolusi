@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   int,
   timestamp,
@@ -59,13 +60,13 @@ export const sessions = mysqlTable("session", {
   expires: timestamp("expires", { mode: "date" }).notNull(),
 });
 
-export const classes = mysqlTable("classes", {
+export const classes = mysqlTable("class", {
   id: int("id").primaryKey().autoincrement(),
   name: varchar("name", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const packages = mysqlTable("packages", {
+export const packages = mysqlTable("package", {
   id: int("id").primaryKey().autoincrement(),
   name: varchar("name", { length: 255 }).notNull(),
   type: mysqlEnum(["tryout", "drill"]).notNull(),
@@ -77,15 +78,57 @@ export const packages = mysqlTable("packages", {
   }),
 });
 
-export const questions = mysqlTable("questions", {
+export const questions = mysqlTable("question", {
   id: varchar("id", { length: 255 })
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   content: varchar("content", { length: 2048 }).notNull(),
-  type: mysqlEnum(["pu", "ppu", "pbm", "pk", "lb", "pm"]).notNull(),
-  score: int("score"),
+  subtest: mysqlEnum(["pu", "ppu", "pbm", "pk", "lb", "pm"]).notNull(),
+  type: mysqlEnum(["essay", "mulChoice"]).notNull(),
+  score: int("score").default(0),
+  correctAnswerId: varchar("correct_answer", { length: 255 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
   packageId: int("packageId")
     .notNull()
     .references(() => packages.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const questionsRelation = relations(questions, ({ one }) => ({
+  correctAnswer: one(answers, {
+    fields: [questions.correctAnswerId],
+    references: [answers.id],
+    relationName: "correctAnswer",
+  }),
+}));
+
+export const answers = mysqlTable("answer", {
+  id: varchar("id", { length: 255 })
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  content: varchar("content", { length: 2048 }).notNull(),
+  questionId: varchar("questionId", { length: 255 })
+    .notNull()
+    .references(() => questions.id, { onDelete: "cascade" }),
+});
+
+export const userAnswers = mysqlTable(
+  "user_answer",
+  {
+    questionId: varchar("questionId", { length: 255 })
+      .notNull()
+      .references(() => questions.id, { onDelete: "cascade" }),
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    answerId: varchar("answerId", { length: 255 }).references(
+      () => answers.id,
+      {
+        onDelete: "cascade",
+      },
+    ),
+    answer: varchar("content", { length: 2048 }).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.questionId] }),
+  }),
+);
