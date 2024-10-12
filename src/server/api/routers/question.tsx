@@ -9,6 +9,13 @@ import { db } from "~/server/db";
 
 export const questionsRouter = createTRPCRouter({
   getAllQuestions: publicProcedure.query(async () => {
-    await db.query.questions.findMany();
+    const questions = await db.query.questions.findMany();
+    return questions ?? null;
+  }),
+
+  getOneQuestion: publicProcedure.query(async ({ ctx }) => {
+    const question = await ctx.db.query.questions.findFirst();
+
+    return question ?? null;
   }),
 });
