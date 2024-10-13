@@ -102,6 +102,7 @@ export const questions = pgTable("question", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
+  index: serial("index").notNull(),
   content: text("content").notNull(),
   subtest: subtestEnum().notNull(),
   type: questionTypeEnum().notNull(),
@@ -125,6 +126,7 @@ export const answers = pgTable("answer", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
+  index: serial("index").notNull(),
   content: text("content").notNull(),
   questionId: text("questionId")
     .notNull()
@@ -134,9 +136,6 @@ export const answers = pgTable("answer", {
 export const userAnswers = pgTable(
   "user_answer",
   {
-    questionId: text("questionId")
-      .notNull()
-      .references(() => questions.id, { onDelete: "cascade" }),
     userId: text("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -146,6 +145,6 @@ export const userAnswers = pgTable(
     answer: text("content").notNull(),
   },
   (t) => ({
-    pk: primaryKey({ columns: [t.userId, t.questionId] }),
+    pk: primaryKey({ columns: [t.userId, t.answerId] }),
   }),
 );
