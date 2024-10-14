@@ -6,9 +6,8 @@
 - push database
 ```bash
 bun db:push
-```
-```bash
 bun dev
+
 ```
 - open [http://localhost:3000](http://localhost:3000)
 
