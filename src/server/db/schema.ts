@@ -107,6 +107,7 @@ export const questions = pgTable("question", {
   subtest: subtestEnum().notNull(),
   type: questionTypeEnum().notNull(),
   score: integer("score").default(0),
+  explanation: text("explanation"),
   correctAnswerId: text("correct_answer"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   packageId: integer("packageId")
@@ -148,3 +149,11 @@ export const userAnswers = pgTable(
     pk: primaryKey({ columns: [t.userId, t.answerId] }),
   }),
 );
+
+export const video = pgTable("video", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  url: text("url").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
