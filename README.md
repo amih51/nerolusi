@@ -14,6 +14,7 @@ bun dev
 ## Tech Stack
 
 - [Next.js](https://nextjs.org)
+- [Bun](https://bun.sh/)
 - [T3App](https://create.t3.gg/)
 - [NextAuth.js](https://next-auth.js.org)
 - [Drizzle](https://orm.drizzle.team)
