@@ -1,5 +1,10 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { questionsRouter } from "./routers/question";
+import { userRouter } from "./routers/user";
+import { classRouter } from "./routers/class";
+import { packageRouter } from "./routers/package";
+import { videoRouter } from "./routers/video";
+import { fileRouter } from "./routers/file";
 
 /**
  * This is the primary router for your server.
@@ -7,6 +12,11 @@ import { questionsRouter } from "./routers/question";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  user: userRouter,
+  class: classRouter,
+  package: packageRouter,
+  video: videoRouter,
+  file: fileRouter,
   question: questionsRouter,
 });
 

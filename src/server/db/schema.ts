@@ -22,7 +22,7 @@ export const users = pgTable("user", {
 });
 
 export const userRelation = relations(users, ({ many }) => ({
-  classes: many(classes),
+  usersToClasses: many(usersToClasses),
 }));
 
 export const accounts = pgTable(
@@ -78,7 +78,7 @@ export const classes = pgTable("class", {
 });
 
 export const classRelation = relations(classes, ({ many }) => ({
-  users: many(users),
+  usersToClasses: many(usersToClasses),
 }));
 
 export const typeEnum = pgEnum("type", ["tryout", "drill"]);
@@ -158,7 +158,7 @@ export const userAnswers = pgTable(
   }),
 );
 
-export const video = pgTable("video", {
+export const videos = pgTable("video", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description"),
@@ -171,3 +171,29 @@ export const files = pgTable("file", {
   title: text("title").notNull(),
   description: text("description"),
 });
+
+export const usersToClasses = pgTable(
+  "users_to_classes",
+  {
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    classId: integer("classId").references(() => classes.id, {
+      onDelete: "cascade",
+    }),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.classId] }),
+  }),
+);
+
+export const usersToClassesRelation = relations(usersToClasses, ({ one }) => ({
+  user: one(users, {
+    fields: [usersToClasses.userId],
+    references: [users.id],
+  }),
+  class: one(classes, {
+    fields: [usersToClasses.classId],
+    references: [classes.id],
+  }),
+}));
