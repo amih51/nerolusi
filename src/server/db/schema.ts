@@ -81,12 +81,12 @@ export const classRelation = relations(classes, ({ many }) => ({
   usersToClasses: many(usersToClasses),
 }));
 
-export const typeEnum = pgEnum("type", ["tryout", "drill"]);
+export const pkgTypeEnum = pgEnum("type", ["tryout", "drill"]);
 
 export const packages = pgTable("package", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  type: typeEnum().notNull(),
+  type: pkgTypeEnum().notNull(),
   TOstart: timestamp("start"),
   TOend: timestamp("end"),
   TOduration: time("duration"),
@@ -197,3 +197,22 @@ export const usersToClassesRelation = relations(usersToClasses, ({ one }) => ({
     references: [classes.id],
   }),
 }));
+
+export type user = typeof users.$inferSelect;
+export type userInsert = typeof users.$inferInsert;
+export type cls = typeof classes.$inferSelect;
+export type clsInsert = typeof classes.$inferInsert;
+export type pkg = typeof packages.$inferSelect;
+export type pkgInsert = typeof packages.$inferInsert;
+export type question = typeof questions.$inferSelect;
+export type questionInsert = typeof questions.$inferInsert;
+export type answer = typeof answers.$inferSelect;
+export type answerInsert = typeof answers.$inferInsert;
+export type user_answer = typeof userAnswers.$inferSelect;
+export type user_answerInsert = typeof userAnswers.$inferInsert;
+export type video = typeof videos.$inferSelect;
+export type videoInsert = typeof videos.$inferInsert;
+export type file = typeof files.$inferSelect;
+export type fileInsert = typeof files.$inferInsert;
+export type users_to_classes = typeof usersToClasses.$inferSelect;
+export type users_to_classesInsert = typeof usersToClasses.$inferInsert;
