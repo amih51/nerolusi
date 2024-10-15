@@ -21,6 +21,10 @@ export const users = pgTable("user", {
   image: text("image"),
 });
 
+export const userRelation = relations(users, ({ many }) => ({
+  classes: many(classes),
+}));
+
 export const accounts = pgTable(
   "account",
   {
@@ -72,6 +76,10 @@ export const classes = pgTable("class", {
   name: text("name").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const classRelation = relations(classes, ({ many }) => ({
+  users: many(users),
+}));
 
 export const typeEnum = pgEnum("type", ["tryout", "drill"]);
 
@@ -156,4 +164,10 @@ export const video = pgTable("video", {
   description: text("description"),
   url: text("url").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const files = pgTable("file", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
 });
