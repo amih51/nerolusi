@@ -3,6 +3,10 @@ import "~/styles/globals.css";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "./_components/theme-provider";
 import { SessionProvider } from "next-auth/react";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+
+import { ourFileRouter } from "~/app/api/uploadthing/core";
 
 export const metadata: Metadata = {
   title: "Nerolusi",
@@ -25,6 +29,9 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
+              <NextSSRPlugin
+                routerConfig={extractRouterConfig(ourFileRouter)}
+              />
               {children}
             </ThemeProvider>
           </SessionProvider>

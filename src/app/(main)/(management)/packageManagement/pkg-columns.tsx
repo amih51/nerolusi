@@ -1,9 +1,10 @@
 "use client";
 
+import { type pkg } from "~/server/db/schema";
+import { type ColumnDef } from "@tanstack/react-table";
 import { Badge } from "~/app/_components/ui/badge";
 import { Checkbox } from "~/app/_components/ui/checkbox";
 import { QuestionMarkCircledIcon, StopwatchIcon } from "@radix-ui/react-icons";
-import { type ColumnDef } from "@tanstack/react-table";
 import { DataTableRowActions } from "~/app/_components/table/data-table-row-actions";
 import { DataTableColumnHeader } from "~/app/_components/table/data-table-column-header";
 
@@ -20,17 +21,7 @@ const packageTypes = [
   },
 ];
 
-export type Package = {
-  id: number;
-  name: string;
-  type: "tryout" | "drill";
-  TOstart: Date | null;
-  TOend: Date | null;
-  TOduration: string | null;
-  classId: number | null;
-};
-
-export const columns: ColumnDef<Package>[] = [
+export const columns: ColumnDef<pkg>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -69,25 +60,34 @@ export const columns: ColumnDef<Package>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Package Name" />
     ),
-    cell: ({ row }) => (
-      <span className="font-medium">{row.getValue("name")}</span>
-    ),
-  },
-  {
-    accessorKey: "type",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Type" />
-    ),
     cell: ({ row }) => {
       const packageType = packageTypes.find(
-        (type) => type.value === row.getValue("type"),
+        (type) => type.value === row.original.type,
       );
 
-      return packageType ? (
-        <Badge variant="outline">{packageType.label}</Badge>
-      ) : null;
+      return (
+        <div>
+          {packageType && <Badge variant="outline">{packageType.label}</Badge>}{" "}
+          <span className="font-medium">{row.getValue("name")}</span>
+        </div>
+      );
     },
   },
+  // {
+  //   accessorKey: "type",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Type" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const packageType = packageTypes.find(
+  //       (type) => type.value === row.getValue("type"),
+  //     );
+
+  //     return packageType ? (
+  //       <Badge variant="outline">{packageType.label}</Badge>
+  //     ) : null;
+  //   },
+  // },
   {
     accessorKey: "TOstart",
     header: ({ column }) => (

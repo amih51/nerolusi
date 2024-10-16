@@ -170,6 +170,7 @@ export const files = pgTable("file", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description"),
+  url: text("url").notNull(),
 });
 
 export const usersToClasses = pgTable(

@@ -2,13 +2,15 @@
 
 ## Getting Started
 
-- setup .env 
+- setup .env
 - push database
+
 ```bash
 bun db:push
 bun dev
 
 ```
+
 - open [http://localhost:3000](http://localhost:3000)
 
 ## Tech Stack
@@ -22,5 +24,3 @@ bun dev
 - [tRPC](https://trpc.io)
 - [Postgresql](https://www.postgresql.org/)
 - [Uploadthing](https://uploadthing.com/)
-- [Edge Store](https://edgestore.dev/)
-
