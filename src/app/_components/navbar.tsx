@@ -71,7 +71,6 @@ export default function Navbar() {
           className="mr-6"
         ></Image>
       </Link>
-
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -99,19 +98,24 @@ export default function Navbar() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-
-      {user?.role == "admin" && (
+      {user?.role === "admin" && (
         <Button variant={"outline"} asChild>
-          <Link href={"/"}>Manajemen Akun</Link>
+          <Link href={"/user"}>Manajemen Akun</Link>
         </Button>
       )}
-      {(user?.role == "admin" || user?.role == "/teacher") && (
+      {(user?.role === "admin" || user?.role === "/teacher") && (
         <Button variant={"outline"} asChild>
-          <Link href={"/"}>Manajemen Soal</Link>
+          <Link href={"/packageManagement"}>Manajemen Soal</Link>
         </Button>
       )}
       <ModeToggle />
       <AuthDialog />
+      <Button asChild>
+        <Link href={"/video"}>Video</Link>
+      </Button>
+      <Button asChild>
+        <Link href={"/file"}>File</Link>
+      </Button>
     </div>
   );
 }

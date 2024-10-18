@@ -21,8 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="size-full">
-        <TRPCReactProvider>
-          <SessionProvider>
+        <SessionProvider>
+          <TRPCReactProvider>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -34,8 +34,8 @@ export default function RootLayout({
               />
               {children}
             </ThemeProvider>
-          </SessionProvider>
-        </TRPCReactProvider>
+          </TRPCReactProvider>
+        </SessionProvider>
       </body>
     </html>
   );
