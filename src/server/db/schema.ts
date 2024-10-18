@@ -11,6 +11,8 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
+export const role = pgEnum("role", ["user", "teacher", "admin"]);
+
 export const users = pgTable("user", {
   id: text("id")
     .primaryKey()
@@ -19,6 +21,8 @@ export const users = pgTable("user", {
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  role: role().notNull().default("user"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const userRelation = relations(users, ({ many }) => ({
