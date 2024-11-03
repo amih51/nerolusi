@@ -38,7 +38,6 @@ export default function CreatePackage({ packageId }: { packageId: string }) {
   }, [data]);
 
   const addQuestion = () => {
-    const newIndex = questions.length + 1;
     setQuestions((prev) => [
       ...prev,
       {
@@ -46,7 +45,7 @@ export default function CreatePackage({ packageId }: { packageId: string }) {
         type: "mulChoice",
         subtest: subtest,
         id: crypto.randomUUID(),
-        index: newIndex,
+        index: (data?.questions.length ?? 0) + 1,
         content: "",
         imageUrl: null,
         score: null,

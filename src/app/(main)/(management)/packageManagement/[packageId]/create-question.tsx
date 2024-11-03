@@ -19,12 +19,25 @@ export default function CreateQuestion({ data }: { data: question }) {
   const [imageUrl, setImageUrl] = useState<string | undefined>(
     data.imageUrl ?? undefined,
   );
+  const [score, setScore] = useState<number>(data.score ?? 10);
+  const [explanation, setExplanation] = useState<string>(
+    data.explanation ?? "",
+  );
 
   const editor = useEditor({
     extensions: [StarterKit],
     content: data.content ?? "",
     editable: true,
     immediatelyRender: false,
+  });
+
+  const explanationEditor = useEditor({
+    extensions: [StarterKit],
+    content: explanation,
+    editable: true,
+    onUpdate: ({ editor }) => {
+      setExplanation(editor.getHTML());
+    },
   });
 
   const previousContentRef = useRef(data.content); // Store the previous content
@@ -42,8 +55,8 @@ export default function CreateQuestion({ data }: { data: question }) {
           imageUrl: imageUrl,
           subtest: data.subtest,
           type: "mulChoice" as "essay" | "mulChoice",
-          score: 10,
-          correctAnswerId: data.correctAnswerId ?? undefined,
+          score: score,
+          explanation: explanation,
           packageId: data.packageId,
         };
 
@@ -74,7 +87,15 @@ export default function CreateQuestion({ data }: { data: question }) {
         editor.off("update", handleContentChange);
       }
     };
-  }, [editor, data, imageUrl, addQuestionApi, updateQuestionApi]); // Dependency array
+  }, [
+    editor,
+    data,
+    imageUrl,
+    score,
+    explanation,
+    addQuestionApi,
+    updateQuestionApi,
+  ]); // Dependency array
 
   useEffect(() => {
     if (getAnswersApi.data) {
@@ -91,12 +112,46 @@ export default function CreateQuestion({ data }: { data: question }) {
       />
       <UploadButton
         endpoint="imageUploader"
-        onClientUploadComplete={(res) => setImageUrl(res?.[0]?.url)}
+        onClientUploadComplete={async (res) => {
+          setImageUrl(res?.[0]?.url);
+          await updateQuestionApi.mutateAsync({
+            id: data.id,
+            type: data.type,
+            subtest: data.subtest,
+            index: data.index,
+            content: editor?.getHTML() ?? "",
+            packageId: data.packageId,
+            imageUrl: res?.[0]?.url,
+            score: score,
+            explanation: explanation,
+          });
+        }}
         onUploadError={(error) => alert(`ERROR! ${error.message}`)}
       />
       {imageUrl && (
         <Image src={imageUrl} alt="Uploaded" width={500} height={300} />
       )}
+
+      {/* Input field for Score */}
+      <div>
+        <label htmlFor="score">Score:</label>
+        <input
+          id="score"
+          type="number"
+          value={score}
+          onChange={(e) => setScore(Number(e.target.value))}
+          className="border p-2"
+        />
+      </div>
+
+      {/* Explanation Editor */}
+      <div>
+        <label htmlFor="explanation">Explanation:</label>
+        <EditorContent
+          editor={explanationEditor}
+          className="max-h-[50vh] min-h-16 border p-2"
+        />
+      </div>
 
       <AnswerEditor
         questionId={data.id}
