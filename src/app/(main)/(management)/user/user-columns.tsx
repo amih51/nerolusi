@@ -2,7 +2,6 @@
 
 import { type user } from "~/server/db/schema";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "~/app/_components/ui/checkbox";
 import { DataTableColumnHeader } from "~/app/_components/table/data-table-column-header";
 import { DataTableRowActions } from "~/app/_components/table/data-table-row-actions";
 import {
@@ -15,30 +14,6 @@ import {
 import { api } from "~/trpc/react";
 
 export const columns: ColumnDef<user>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "name",
     header: ({ column }) => (

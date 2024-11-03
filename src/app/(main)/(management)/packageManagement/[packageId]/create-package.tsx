@@ -1,44 +1,82 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "~/app/_components/ui/button";
 import { api } from "~/trpc/react";
+import CreateQuestion from "./create-question";
+import { type question } from "~/server/db/schema";
 
-const subtestOptions = ["pk", "pu", "ppu", "pbm", "lb", "pm"] as const;
-const pkgTypeOptions = ["tryout", "drill"] as const;
-
-export default function CreatePackage() {
-  const [name, setName] = useState("");
-  const [type, setType] = useState<(typeof pkgTypeOptions)[number]>(
-    pkgTypeOptions[0],
-  );
+export default function CreatePackage({ packageId }: { packageId: string }) {
+  const [name, setName] = useState<string | undefined>("");
+  const [type, setType] = useState<"tryout" | "drill" | undefined>(undefined);
   const [start, setStart] = useState<string>("");
   const [end, setEnd] = useState<string>("");
-  const [duration, setDuration] = useState<string>("");
-  const [classId, setClassId] = useState<number | undefined>(undefined);
-  const [subtest, setSubtest] = useState<string>(subtestOptions[0]);
+  const [duration, setDuration] = useState<string | null | undefined>("");
+  const [classId, setClassId] = useState<number | null | undefined>(null);
+  const [subtest, setSubtest] = useState<
+    "pk" | "pu" | "ppu" | "pbm" | "lb" | "pm"
+  >("pk");
+  const [questions, setQuestions] = useState<question[]>([]);
+
+  const { data, isLoading } = api.package.getOnePackage.useQuery(
+    { packageId },
+    {
+      enabled: !!packageId,
+    },
+  );
+
+  useEffect(() => {
+    if (data) {
+      setName(data.name);
+      setType(data.type);
+      setStart(data.TOstart ? data.TOstart.toISOString().slice(0, 16) : "");
+      setEnd(data.TOend ? data.TOend.toISOString().slice(0, 16) : "");
+      setDuration(data.TOduration);
+      setClassId(data.classId);
+      setQuestions(data.questions);
+    }
+  }, [data]);
+
+  const addQuestion = () => {
+    const newIndex = questions.length + 1;
+    setQuestions((prev) => [
+      ...prev,
+      {
+        packageId: Number(packageId),
+        type: "mulChoice",
+        subtest: subtest,
+        id: crypto.randomUUID(),
+        index: newIndex,
+        content: "",
+        imageUrl: null,
+        score: null,
+        explanation: null,
+        correctAnswerId: null,
+        createdAt: new Date(),
+      },
+    ]);
+  };
 
   const createPackageApi = api.package.createPackage.useMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await createPackageApi.mutateAsync({
-      name,
-      type,
+      name: name ?? "",
+      type: type ?? "tryout",
       start: start ? new Date(start) : undefined,
       end: end ? new Date(end) : undefined,
-      duration,
-      classId,
+      duration: duration ?? "",
+      classId: classId ?? undefined,
     });
-
-    setName("");
-    setType(pkgTypeOptions[0]);
-    setStart("");
-    setEnd("");
-    setDuration("");
-    setClassId(undefined);
-    setSubtest(subtestOptions[0]);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const pkgTypeOptions: ("tryout" | "drill")[] = ["tryout", "drill"];
+  const subtestOptions: string[] = ["pk", "pu", "ppu", "pbm", "lb", "pm"];
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
@@ -54,7 +92,7 @@ export default function CreatePackage() {
       <select
         value={type}
         onChange={(e) =>
-          setType(e.target.value as (typeof pkgTypeOptions)[number])
+          setType(e.target.value as "tryout" | "drill" | undefined)
         }
         className="border p-2"
       >
@@ -78,7 +116,7 @@ export default function CreatePackage() {
       />
       <input
         type="text"
-        value={duration}
+        value={duration ?? ""}
         onChange={(e) => setDuration(e.target.value)}
         placeholder="Duration (e.g., HH:MM)"
         className="border p-2"
@@ -92,7 +130,11 @@ export default function CreatePackage() {
       />
       <select
         value={subtest}
-        onChange={(e) => setSubtest(e.target.value)}
+        onChange={(e) =>
+          setSubtest(
+            e.target.value as "pk" | "pu" | "ppu" | "pbm" | "lb" | "pm",
+          )
+        }
         className="border p-2"
       >
         {subtestOptions.map((option) => (
@@ -101,6 +143,12 @@ export default function CreatePackage() {
           </option>
         ))}
       </select>
+      {questions.map((question) => (
+        <CreateQuestion key={question.id} data={question} />
+      ))}
+      <Button type="button" onClick={addQuestion} variant={"outline"}>
+        + Add Question
+      </Button>
       <Button type="submit" variant={"outline"}>
         Create Package
       </Button>

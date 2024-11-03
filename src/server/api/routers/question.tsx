@@ -1,20 +1,27 @@
+import { eq } from "drizzle-orm";
 import { z } from "zod";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { questions } from "~/server/db/schema";
 
 export const questionsRouter = createTRPCRouter({
+  getOneQuestions: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const questionsData = await ctx.db
+        .select()
+        .from(questions)
+        .where(eq(questions.id, input.id));
+
+      return questionsData[0];
+    }),
+
   getAllQuestions: protectedProcedure.query(async ({ ctx }) => {
     const questions = await ctx.db.query.questions.findMany();
     return questions ?? null;
-  }),
-
-  getOneQuestion: publicProcedure.query(async ({ ctx }) => {
-    const question = await ctx.db.query.questions.findFirst();
-    return question ?? null;
   }),
 
   addQuestion: protectedProcedure

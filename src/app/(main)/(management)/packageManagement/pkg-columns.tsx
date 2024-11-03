@@ -3,7 +3,6 @@
 import { type pkg } from "~/server/db/schema";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Badge } from "~/app/_components/ui/badge";
-import { Checkbox } from "~/app/_components/ui/checkbox";
 import { QuestionMarkCircledIcon, StopwatchIcon } from "@radix-ui/react-icons";
 import { DataTableRowActions } from "~/app/_components/table/data-table-row-actions";
 import { DataTableColumnHeader } from "~/app/_components/table/data-table-column-header";
@@ -22,30 +21,6 @@ const packageTypes = [
 ];
 
 export const columns: ColumnDef<pkg>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "id",
     header: ({ column }) => (

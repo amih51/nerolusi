@@ -1,8 +1,38 @@
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { packages } from "~/server/db/schema";
+import { packages, questions } from "~/server/db/schema";
 
 export const packageRouter = createTRPCRouter({
+  getOnePackage: protectedProcedure
+    .input(
+      z.object({
+        packageId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const packageData = await ctx.db
+        .select()
+        .from(packages)
+        .where(eq(packages.id, Number(input.packageId)));
+
+      const questionsData = await ctx.db
+        .select()
+        .from(questions)
+        .where(eq(questions.packageId, Number(input.packageId)));
+      // const questionsData = await ctx.db.query.questions.findMany({
+      //   where: eq(questions.packageId, Number(input.packageId)),
+      //   with: {
+      //     correctAnswer: true,
+      //   },
+      // });
+
+      return {
+        ...packageData[0],
+        questions: questionsData,
+      };
+    }),
+
   getAllPackages: protectedProcedure.query(async ({ ctx }) => {
     const packages = await ctx.db.query.packages.findMany();
     return packages ?? null;

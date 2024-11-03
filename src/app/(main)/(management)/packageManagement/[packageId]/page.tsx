@@ -1,9 +1,13 @@
 import CreatePackage from "./create-package";
 
-export default function PackagePage() {
+export default function Page({
+  params: { packageId },
+}: {
+  params: { packageId: string };
+}) {
   return (
     <main className="flex w-full flex-col">
-      <CreatePackage />
+      <CreatePackage packageId={packageId} />
     </main>
   );
 }
