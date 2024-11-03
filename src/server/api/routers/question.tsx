@@ -28,13 +28,13 @@ export const questionsRouter = createTRPCRouter({
     .input(
       z.object({
         index: z.number().int().nonnegative(),
-        content: z.string().min(1, "Content is required"),
-        imageUrl: z.string().optional(),
+        content: z.string(),
+        imageUrl: z.string().optional().nullable(),
         subtest: z.enum(["pu", "ppu", "pbm", "pk", "lb", "pm"]),
         type: z.enum(["essay", "mulChoice"]),
-        score: z.number().optional(),
-        correctAnswerId: z.string().optional(),
-        explanation: z.string().optional(),
+        score: z.number().optional().nullable(),
+        correctAnswerId: z.string().optional().nullable(),
+        explanation: z.string().optional().nullable(),
         packageId: z.number().int(),
       }),
     )

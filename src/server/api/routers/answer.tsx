@@ -14,7 +14,8 @@ export const answerRouter = createTRPCRouter({
       return await ctx.db
         .select()
         .from(answers)
-        .where(eq(answers.questionId, input.questionId));
+        .where(eq(answers.questionId, input.questionId))
+        .orderBy(answers.index);
     }),
 
   createAnswer: protectedProcedure

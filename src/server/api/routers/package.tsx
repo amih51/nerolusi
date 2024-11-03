@@ -28,11 +28,13 @@ export const packageRouter = createTRPCRouter({
     }),
 
   getAllPackages: protectedProcedure.query(async ({ ctx }) => {
-    const packages = await ctx.db.query.packages.findMany();
+    const packages = await ctx.db.query.packages.findMany({
+      orderBy: (packages, { desc }) => [desc(packages.id)],
+    });
     return packages ?? null;
   }),
 
-  createPackage: protectedProcedure
+  addPackage: protectedProcedure
     .input(
       z.object({
         name: z.string().min(1, "Package name is required"),

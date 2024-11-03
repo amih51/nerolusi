@@ -18,6 +18,8 @@ export default function CreatePackage({ packageId }: { packageId: string }) {
   >("pk");
   const [questions, setQuestions] = useState<question[]>([]);
 
+  const createPackageApi = api.package.addPackage.useMutation();
+  const createQuestionApi = api.question.addQuestion.useMutation();
   const { data, isLoading } = api.package.getOnePackage.useQuery(
     { packageId },
     {
@@ -37,26 +39,27 @@ export default function CreatePackage({ packageId }: { packageId: string }) {
     }
   }, [data]);
 
-  const addQuestion = () => {
-    setQuestions((prev) => [
-      ...prev,
-      {
-        packageId: Number(packageId),
-        type: "mulChoice",
-        subtest: subtest,
-        id: crypto.randomUUID(),
-        index: (data?.questions.length ?? 0) + 1,
-        content: "",
-        imageUrl: null,
-        score: null,
-        explanation: null,
-        correctAnswerId: null,
-        createdAt: new Date(),
-      },
-    ]);
-  };
+  const addQuestion = async () => {
+    const newQuestion = {
+      packageId: Number(packageId),
+      type: "mulChoice" as "essay" | "mulChoice",
+      subtest: subtest,
+      id: crypto.randomUUID(),
+      index: (data?.questions.length ?? 0) + 1,
+      content: "",
+      imageUrl: null,
+      score: null,
+      explanation: null,
+      correctAnswerId: null,
+      createdAt: new Date(),
+    };
 
-  const createPackageApi = api.package.createPackage.useMutation();
+    // Update local state
+    setQuestions((prev) => [...prev, newQuestion]);
+
+    // Send to the API
+    await createQuestionApi.mutateAsync(newQuestion);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
