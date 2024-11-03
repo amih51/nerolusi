@@ -16,6 +16,7 @@ import { ModeToggle } from "./mode-toggle";
 import { cn } from "~/lib/utils";
 import { useSession } from "next-auth/react";
 import AuthDialog from "./auth-dialog";
+import { useTime } from "react-timer-hook";
 
 const soals: { title: string; href: string; description: string }[] = [
   {
@@ -116,6 +117,7 @@ export default function Navbar() {
       <Button asChild>
         <Link href={"/file"}>File</Link>
       </Button>
+      <MyTime />
     </div>
   );
 }
@@ -145,3 +147,15 @@ const ListItem = React.forwardRef<
   );
 });
 ListItem.displayName = "ListItem";
+
+function MyTime() {
+  const { seconds, minutes, hours } = useTime();
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <div style={{ fontSize: "50px" }}>
+        <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+      </div>
+    </div>
+  );
+}

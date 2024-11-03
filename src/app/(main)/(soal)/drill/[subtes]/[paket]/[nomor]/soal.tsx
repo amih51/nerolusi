@@ -2,8 +2,52 @@
 
 import Image from "next/image";
 import { api } from "~/trpc/react";
+import { useTimer } from "react-timer-hook";
+
+function MyTimer({ expiryTimestamp }: { expiryTimestamp: Date }) {
+  const {
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    resume,
+    restart,
+  } = useTimer({
+    expiryTimestamp,
+    onExpire: () => console.warn("onExpire called"),
+  });
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <div style={{ fontSize: "50px" }}>
+        <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:
+        <span>{seconds}</span>
+      </div>
+      <p>{isRunning ? "Running" : "Not running"}</p>
+      <button onClick={start}>Start</button>
+      <button onClick={pause}>Pause</button>
+      <button onClick={resume}>Resume</button>
+      <button
+        onClick={() => {
+          // Restarts to 5 minutes timer
+          const time = new Date();
+          time.setSeconds(time.getSeconds() + 300);
+          restart(time);
+        }}
+      >
+        Restart
+      </button>
+    </div>
+  );
+}
 
 export function Soal() {
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 600);
+
   const {
     data: soal,
     error,
@@ -22,6 +66,7 @@ export function Soal() {
 
   return (
     <div className="w-full max-w-xs border">
+      <MyTimer expiryTimestamp={time} />
       {soal ? (
         <p className="truncate">
           Content: {soal.content} <br />
