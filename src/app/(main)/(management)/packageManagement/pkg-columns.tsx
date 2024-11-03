@@ -27,7 +27,6 @@ export const columns: ColumnDef<pkg>[] = [
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
-    enableSorting: false,
     enableHiding: false,
   },
   {
@@ -48,21 +47,6 @@ export const columns: ColumnDef<pkg>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "type",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Type" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const packageType = packageTypes.find(
-  //       (type) => type.value === row.getValue("type"),
-  //     );
-
-  //     return packageType ? (
-  //       <Badge variant="outline">{packageType.label}</Badge>
-  //     ) : null;
-  //   },
-  // },
   {
     accessorKey: "TOstart",
     header: ({ column }) => (

@@ -63,6 +63,49 @@ export const questionsRouter = createTRPCRouter({
       });
     }),
 
+  updateQuestion: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        index: z.number().int().nonnegative(),
+        content: z.string().min(1, "Content is required"),
+        imageUrl: z.string().optional(),
+        subtest: z.enum(["pu", "ppu", "pbm", "pk", "lb", "pm"]),
+        type: z.enum(["essay", "mulChoice"]),
+        score: z.number().optional(),
+        correctAnswerId: z.string().optional(),
+        explanation: z.string().optional(),
+        packageId: z.number().int(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const {
+        index,
+        content,
+        imageUrl,
+        subtest,
+        type,
+        score,
+        correctAnswerId,
+        explanation,
+        packageId,
+      } = input;
+      await ctx.db
+        .update(questions)
+        .set({
+          index,
+          content,
+          imageUrl,
+          subtest,
+          type,
+          score: score ?? 0,
+          correctAnswerId,
+          explanation: explanation ?? "",
+          packageId,
+        })
+        .where(eq(questions.id, input.id));
+    }),
+
   updateCorrectAnswer: protectedProcedure
     .input(
       z.object({
