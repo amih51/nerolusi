@@ -12,7 +12,7 @@ export default function CreatePackage({ packageId }: { packageId: string }) {
   const [start, setStart] = useState<string>("");
   const [end, setEnd] = useState<string>("");
   const [duration, setDuration] = useState<string | null | undefined>("");
-  const [classId, setClassId] = useState<number | null | undefined>(null);
+  const [classId, setClassId] = useState<number | null | undefined>(undefined);
   const [subtest, setSubtest] = useState<
     "pk" | "pu" | "ppu" | "pbm" | "lb" | "pm"
   >("pk");
@@ -64,6 +64,7 @@ export default function CreatePackage({ packageId }: { packageId: string }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await createPackageApi.mutateAsync({
+      id: Number(packageId),
       name: name ?? "",
       type: type ?? "tryout",
       start: start ? new Date(start) : undefined,

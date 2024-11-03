@@ -10,7 +10,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "./ui/navigation-menu";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./mode-toggle";
 import { cn } from "~/lib/utils";
@@ -150,6 +150,13 @@ ListItem.displayName = "ListItem";
 
 function MyTime() {
   const { seconds, minutes, hours } = useTime();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // This will trigger a re-render once the component mounts
+  }, []);
+
+  if (!isClient) return null; // Render nothing on the server
 
   return (
     <div style={{ textAlign: "center" }}>

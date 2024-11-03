@@ -9,7 +9,7 @@ export default async function Page() {
   return (
     <div>
       <Button asChild variant={"outline"}>
-        <Link href={`/packageManagement/1`}>Create</Link>
+        <Link href={`/packageManagement/${pkg.length + 1}`}>Create</Link>
       </Button>
       <DataTable columns={columns} data={pkg} />
     </div>

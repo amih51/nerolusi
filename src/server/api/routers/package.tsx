@@ -37,6 +37,7 @@ export const packageRouter = createTRPCRouter({
   addPackage: protectedProcedure
     .input(
       z.object({
+        id: z.number(),
         name: z.string().min(1, "Package name is required"),
         type: z.enum(["tryout", "drill"]),
         start: z.date().optional(),
@@ -46,9 +47,10 @@ export const packageRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { name, type, start, end, duration, classId } = input;
+      const { id, name, type, start, end, duration, classId } = input;
 
       const newPackage = await ctx.db.insert(packages).values({
+        id,
         name,
         type,
         TOstart: start ?? null,
