@@ -62,4 +62,18 @@ export const questionsRouter = createTRPCRouter({
         packageId,
       });
     }),
+
+  updateCorrectAnswer: protectedProcedure
+    .input(
+      z.object({
+        questionId: z.string(),
+        correctAnswerId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db
+        .update(questions)
+        .set({ correctAnswerId: input.correctAnswerId })
+        .where(eq(questions.id, input.questionId));
+    }),
 });

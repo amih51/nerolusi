@@ -20,12 +20,6 @@ export const packageRouter = createTRPCRouter({
         .select()
         .from(questions)
         .where(eq(questions.packageId, Number(input.packageId)));
-      // const questionsData = await ctx.db.query.questions.findMany({
-      //   where: eq(questions.packageId, Number(input.packageId)),
-      //   with: {
-      //     correctAnswer: true,
-      //   },
-      // });
 
       return {
         ...packageData[0],
