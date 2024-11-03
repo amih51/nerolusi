@@ -1,5 +1,3 @@
-// import { z } from "zod";
-
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -24,6 +22,7 @@ export const questionsRouter = createTRPCRouter({
       z.object({
         index: z.number().int().nonnegative(),
         content: z.string().min(1, "Content is required"),
+        imageUrl: z.string().optional(),
         subtest: z.enum(["pu", "ppu", "pbm", "pk", "lb", "pm"]),
         type: z.enum(["essay", "mulChoice"]),
         score: z.number().optional(),
@@ -36,6 +35,7 @@ export const questionsRouter = createTRPCRouter({
       const {
         index,
         content,
+        imageUrl,
         subtest,
         type,
         score,
@@ -46,6 +46,7 @@ export const questionsRouter = createTRPCRouter({
       await ctx.db.insert(questions).values({
         index,
         content,
+        imageUrl,
         subtest,
         type,
         score: score ?? 0,

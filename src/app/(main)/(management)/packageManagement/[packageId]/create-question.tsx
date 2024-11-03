@@ -17,6 +17,8 @@ import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
 import { Button } from "~/app/_components/ui/button";
 import { api } from "~/trpc/react";
+import { UploadButton } from "~/utils/uploadthing";
+import { useState } from "react";
 const lowlight = createLowlight(all);
 
 export default function CreateQuestion({
@@ -29,6 +31,7 @@ export default function CreateQuestion({
   subtest: "pk" | "pu" | "ppu" | "pbm" | "lb" | "pm";
 }) {
   const addQuestionApi = api.question.addQuestion.useMutation();
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -58,11 +61,26 @@ export default function CreateQuestion({
         editor={editor}
         className="max-h-[50vh] min-h-16 border p-2"
       />
+      <UploadButton
+        className="border"
+        endpoint="imageUploader"
+        onClientUploadComplete={(res) => {
+          console.log("Files: ", res);
+          if (res?.[0]?.url) {
+            setImageUrl(res[0].url);
+            alert("Upload Completed");
+          }
+        }}
+        onUploadError={(error) => {
+          alert(`ERROR! ${error.message}`);
+        }}
+      />
       <Button
         onClick={() => {
           addQuestionApi.mutate({
             index: +index,
             content: editor?.getHTML() ?? "",
+            imageUrl: imageUrl,
             subtest: subtest,
             type: "mulChoice",
             score: 10,

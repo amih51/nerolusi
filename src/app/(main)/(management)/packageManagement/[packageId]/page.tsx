@@ -1,14 +1,9 @@
-import CreateQuestion from "./create-question";
+import CreatePackage from "./create-package";
 
-export default function Page({
-  params: { packageId },
-}: {
-  params: { packageId: string };
-}) {
+export default function PackagePage() {
   return (
     <main className="flex w-full flex-col">
-      {packageId}
-      <CreateQuestion packageId={`${packageId}`} index={"1"} subtest={"pk"} />
+      <CreatePackage />
     </main>
   );
 }

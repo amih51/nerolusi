@@ -116,6 +116,7 @@ export const questions = pgTable("question", {
     .$defaultFn(() => crypto.randomUUID()),
   index: serial("index").notNull(),
   content: text("content").notNull(),
+  imageUrl: text("url"),
   subtest: subtestEnum().notNull(),
   type: questionTypeEnum().notNull(),
   score: integer("score").default(0),
