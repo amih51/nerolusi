@@ -1,42 +1,38 @@
 "use client";
 
+import Image from "next/image";
 import { api } from "~/trpc/react";
 
 export function Soal() {
-  const [soal] = api.question.getOneQuestion.useSuspenseQuery();
+  const {
+    data: soal,
+    error,
+    isLoading,
+  } = api.question.getOneQuestions.useQuery({
+    id: "789e262a-0f32-4b9e-9726-cf29258e456c",
+  });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error loading question: {error.message}</p>;
+  }
 
   return (
     <div className="w-full max-w-xs border">
       {soal ? (
         <p className="truncate">
-          content: {soal.content} <br />
-          score: {soal.score}{" "}
+          Content: {soal.content} <br />
+          {soal.imageUrl && (
+            <Image src={soal.imageUrl} width={200} height={300} alt="soal" />
+          )}
+          Score: {soal.score}{" "}
         </p>
       ) : (
         <p>You have no soals yet.</p>
       )}
-      {/* <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          createPost.mutate({ name });
-        }}
-        className="flex flex-col gap-2"
-      >
-        <input
-          type="text"
-          placeholder="Title"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-full px-4 py-2 text-black"
-        />
-        <button
-          type="submit"
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-          disabled={createPost.isPending}
-        >
-          {createPost.isPending ? "Submitting..." : "Submit"}
-        </button>
-      </form> */}
     </div>
   );
 }
